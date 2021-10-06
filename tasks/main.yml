@@ -4,4 +4,4 @@
 
 - name: Enable image registry on SNO Clusters
   import_tasks: deploy_imgreg_sno.yml
-  when: deploy_type == 'sno-iso'
+  when: deploy_type == 'sno'
