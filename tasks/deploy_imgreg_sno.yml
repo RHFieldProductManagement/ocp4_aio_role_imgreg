@@ -1,9 +1,9 @@
 ---
 # vim: set ft=ansible:
 
-- name: Pause for 10 minutes to let SNO clusters settle down
+- name: Pause for 20 minutes to let SNO clusters settle down
   pause:
-    minutes: 10
+    minutes: 20
 
 - name: Enable Image Registry on Cluster
   ansible.builtin.shell: >
