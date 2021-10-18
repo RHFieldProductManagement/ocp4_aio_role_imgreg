@@ -1,7 +1,7 @@
 - name: Enable image registry
-  import_tasks: ocp4_aio_deploy_imgreg.yml
+  import_tasks: deploy_imgreg.yml
   when: ocp4_aio_deploy_type == 'upi' or ocp4_aio_deploy_type == 'ipi'
 
 - name: Enable image registry on SNO Clusters
-  import_tasks: ocp4_aio_deploy_imgreg_sno.yml
+  import_tasks: deploy_imgreg_sno.yml
   when: ocp4_aio_deploy_type == 'sno'
