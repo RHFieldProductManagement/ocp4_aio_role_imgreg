@@ -1,21 +1,15 @@
 ---
 # vim: set ft=ansible:
 
-- name: Pause for 20 minutes to let SNO clusters settle down
-  pause:
-    minutes: 20
-
-- name: Enable Image Registry on Cluster
-  ansible.builtin.shell: >
-    oc --kubeconfig "/root/sno-{{ item }}/auth/kubeconfig" patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"managementState":"Managed"}}'
-  loop:
-    - rhacm
-    - edge1
-    - edge2
-
-- name: Enable PVC based storage for Image Registry
-  ansible.builtin.shell: >
-    oc --kubeconfig "/root/sno-{{ item }}/auth/kubeconfig" patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"pvc":{}}}}'
+- name: Enabling image registry
+  k8s:
+    state: present
+    kubeconfig: /root/sno-{{ item }}/auth/kubeconfig
+    definition: "{{ lookup('file', 'image-registry.yaml') }}"
+  register: imgreg_success
+  retries: 20
+  delay: 30
+  until: imgreg_success is not failed
   loop:
     - rhacm
     - edge1
