@@ -1,11 +1,20 @@
 ---
 # vim: set ft=ansible:
 
-- name: Enabling image registry
-  k8s:
-    state: present
-    definition: "{{ lookup('file', 'image-registry.yaml') }}"
-  register: imgreg_success
-  retries: 20
-  delay: 30
-  until: imgreg_success is not failed
+# - name: Enabling image registry
+#   k8s:
+#     state: present
+#     definition: "{{ lookup('file', 'image-registry.yaml') }}"
+#   register: imgreg_success
+#   retries: 20
+#   delay: 30
+#   until: imgreg_success is not failed
+
+- name: Enable Image Registry on Cluster
+  ansible.builtin.shell: >
+    oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"managementState":"Managed"}}'
+
+- name: Enable PVC based storage for Image Registry
+  ansible.builtin.shell: >
+    oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"pvc":{}}}}'
+
